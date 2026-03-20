@@ -7,3 +7,26 @@ services:
       - ./:/app:delegated
     ports:
       - '8000:80'
+    networks:
+      - internal
+
+  postgres:
+    image: postgres:16-alpine
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=500"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      # Явно указываем метод аутентификации
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      # Разрешаем все подключения
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    networks:
+      - internal
+
+
+networks:
+  internal:
