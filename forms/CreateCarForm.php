@@ -20,7 +20,7 @@ class CreateCarForm extends Model
     public function rules(): array
     {
         return [
-            [['title', 'price', 'contacts'], 'required'],
+            [['title', 'price', 'contacts', 'photo_url', 'description'], 'required'],
             [['title', 'contacts', 'photo_url'], 'string', 'max' => 255],
             [['price'], 'number'],
             [['description'], 'string'],

@@ -100,7 +100,7 @@ final class CreateCarFormTest extends Unit
         $this->assertCount(2, $this->form->options);
     }
 
-    public function testValidateFailMissingTitle(): void
+    public function testValidateFailEmptyTitle(): void
     {
         $this->form->attributes = [
             'title' => '',
@@ -115,7 +115,7 @@ final class CreateCarFormTest extends Unit
         $this->assertArrayHasKey('title', $this->form->getErrors());
     }
 
-    public function testValidateFailMissingDescription(): void
+    public function testValidateFailEmptyDescription(): void
     {
         $this->form->attributes = [
             'title' => 'BMW X5',
@@ -126,24 +126,12 @@ final class CreateCarFormTest extends Unit
             'options' => null,
         ];
 
-        $this->assertTrue($this->form->validate());
+        $this->assertFalse($this->form->validate());
+        $this->assertArrayHasKey('description', $this->form->getErrors());
     }
 
-    public function testValidateFailMissingPrice(): void
-    {
-        $this->form->attributes = [
-            'title' => 'BMW X5',
-            'description' => 'Test',
-            'price' => 0.0,
-            'photo_url' => 'http://example.com/img.jpg',
-            'contacts' => '+79990000000',
-            'options' => null,
-        ];
 
-        $this->assertTrue($this->form->validate());
-    }
-
-    public function testValidateFailMissingContacts(): void
+    public function testValidateFailEmptyContacts(): void
     {
         $this->form->attributes = [
             'title' => 'BMW X5',
@@ -158,7 +146,7 @@ final class CreateCarFormTest extends Unit
         $this->assertArrayHasKey('contacts', $this->form->getErrors());
     }
 
-    public function testValidateFailMissingPhotoUrl(): void
+    public function testValidateFailEmptyPhotoUrl(): void
     {
         $this->form->attributes = [
             'title' => 'BMW X5',
@@ -169,7 +157,8 @@ final class CreateCarFormTest extends Unit
             'options' => null,
         ];
 
-        $this->assertTrue($this->form->validate());
+        $this->assertFalse($this->form->validate());
+        $this->assertArrayHasKey('photo_url', $this->form->getErrors());
     }
 
     public function testValidateFailMissingOptions(): void
@@ -518,20 +507,6 @@ final class CreateCarFormTest extends Unit
             'title' => 'BMW X5',
             'description' => 'Test',
             'price' => 0.0,
-            'photo_url' => 'http://example.com/img.jpg',
-            'contacts' => '+79990000000',
-            'options' => null,
-        ];
-
-        $this->assertTrue($this->form->validate());
-    }
-
-    public function testValidateWithEmptyStringDescription(): void
-    {
-        $this->form->attributes = [
-            'title' => 'BMW X5',
-            'description' => '',
-            'price' => 5000000.00,
             'photo_url' => 'http://example.com/img.jpg',
             'contacts' => '+79990000000',
             'options' => null,
