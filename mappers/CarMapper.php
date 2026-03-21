@@ -26,7 +26,7 @@ class CarMapper
         $carModel->photo_url = $carDto->photoUrl;
         $carModel->contacts = $carDto->contacts;
         $carModel->description = $carDto->description;
-
+        $carModel->created_at = date('Y-m-d H:i:s');
         return $carModel;
     }
 
