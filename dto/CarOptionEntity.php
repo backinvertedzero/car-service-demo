@@ -1,6 +1,6 @@
 <?php
 
-namespace app\entities;
+namespace app\dto;
 
 class CarOptionEntity
 {
