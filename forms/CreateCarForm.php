@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace app\forms;
 
 use app\dto\CarDto;
@@ -8,17 +10,17 @@ use yii\base\Model;
 
 class CreateCarForm extends Model
 {
-    public string $title;
-    public string $description;
-    public float $price;
-    public ?string $photo_url;
-    public string $contacts;
-    public ?array $options;
+    public string $title = '';
+    public string $description = '';
+    public string $price = '';
+    public string $photo_url = '';
+    public string $contacts = '';
+    public ?array $options = null;
 
     public function rules(): array
     {
         return [
-            [['title', 'description', 'price', 'contacts', 'photo_url', 'options'], 'required'],
+            [['title', 'price', 'contacts'], 'required'],
             [['title', 'contacts', 'photo_url'], 'string', 'max' => 255],
             [['price'], 'number'],
             [['description'], 'string'],
@@ -27,7 +29,7 @@ class CreateCarForm extends Model
         ];
     }
 
-    public function validateOptions($attribute, $params)
+    public function validateOptions($attribute, $params): void
     {
         if ($this->$attribute === null) {
             return;
@@ -56,7 +58,7 @@ class CreateCarForm extends Model
     public function makeCarDto(): CarDto
     {
         $options = null;
-        if ($this->options != null && count($this->options) > 0) {
+        if ($this->options !== null && count($this->options) > 0) {
             foreach ($this->options as $item) {
                 $options[] = new CarOptionDto(
                     brand: $item['brand'],
