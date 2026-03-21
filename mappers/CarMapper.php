@@ -32,11 +32,15 @@ class CarMapper
 
     /**
      * @param int $carId
-     * @param array $options
+     * @param array|null $options
      * @return array
      */
-    public function mapOptionsFromDto(int $carId, array $options): array
+    public function mapOptionsFromDto(int $carId, ?array $options): array
     {
+        if ($options == null) {
+            return [];
+        }
+
         return array_map(
             fn(CarOptionDto $opt) => [
                 'car_id' => $carId,
