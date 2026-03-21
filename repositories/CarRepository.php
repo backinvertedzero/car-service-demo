@@ -12,10 +12,11 @@ use app\models\Car;
 use app\models\CarOption;
 use Exception;
 use Yii;
+use yii\data\Pagination;
 
-class CarRepository
+readonly class CarRepository
 {
-    public function __construct(private readonly CarMapper $carMapper)
+    public function __construct(private CarMapper $carMapper)
     {
     }
 
@@ -68,6 +69,11 @@ class CarRepository
         }
     }
 
+    /**
+     * @param int $id
+     * @return CarEntity
+     * @throws ModelNotFound
+     */
     public function getById(int $id): CarEntity
     {
         $model = Car::findOne($id);
@@ -77,6 +83,37 @@ class CarRepository
         }
 
         return $this->carMapper->mapToEntity($model);
+    }
+
+    /**
+     * @param int $page
+     * @param int $perPage
+     * @return array
+     */
+    public function findAll(int $page, int $perPage = 10): array
+    {
+        $query = Car::find()->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => $perPage,
+            'page' => $page - 1,
+            'validatePage' => true,
+        ]);
+
+        $models = $query
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        $entities = [];
+
+        // @todo backlog!
+        foreach ($models as $model) {
+            $entities[] = $this->carMapper->mapToEntity($model);
+        }
+
+        return $entities;
     }
 
 }

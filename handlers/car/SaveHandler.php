@@ -6,14 +6,9 @@ use app\dto\CarDto;
 use app\dto\SaveCarResult;
 use app\exceptions\handlers\CarNotSaved;
 use app\exceptions\repository\ModelNotSaved;
-use app\repositories\CarRepository;
 
-class SaveHandler
+class SaveHandler extends BaseHandler
 {
-    public function __construct(private readonly CarRepository $repository)
-    {
-    }
-
     /**
      * @param CarDto $carDto
      * @return SaveCarResult

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\exceptions\handlers\CarNotFound;
 use app\forms\CreateCarForm;
+use app\handlers\car\ListHandler;
 use app\handlers\car\SaveHandler;
 use app\handlers\car\ViewHandler;
 use yii\rest\Controller;
@@ -18,6 +19,7 @@ class CarController extends Controller
         $module,
         private readonly SaveHandler $saveHandler,
         private readonly ViewHandler $viewHandler,
+        private readonly ListHandler $listHandler,
         $config = []
     ) {
         parent::__construct($id, $module, $config);
@@ -69,6 +71,12 @@ class CarController extends Controller
 
     public function actionList()
     {
-        //
+        $page = (int)Yii::$app->request->get('page', 1);
+
+        if ($page < 1) {
+            throw new BadRequestHttpException('Page must be greater than 0');
+        }
+
+        return $this->listHandler->handler($page);
     }
 }
