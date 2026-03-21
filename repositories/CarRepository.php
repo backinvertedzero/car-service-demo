@@ -5,6 +5,7 @@ namespace app\repositories;
 use app\dto\CarDto;
 use app\dto\CarEntity;
 use app\dto\FindCarResult;
+use app\exceptions\repository\ModelNotFound;
 use app\exceptions\repository\ModelNotSaved;
 use app\mappers\CarMapper;
 use app\models\Car;
@@ -65,6 +66,17 @@ class CarRepository
             $transaction->rollBack();
             throw new ModelNotSaved($exception->getMessage());
         }
+    }
+
+    public function getById(int $id): CarEntity
+    {
+        $model = Car::findOne($id);
+
+        if ($model == null) {
+            throw new ModelNotFound('Car not found by id ' . $id);
+        }
+
+        return $this->carMapper->mapToEntity($model);
     }
 
 }

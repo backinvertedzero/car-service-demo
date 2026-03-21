@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\exceptions\handlers\CarNotFound;
 use app\forms\CreateCarForm;
 use app\handlers\car\SaveHandler;
+use app\handlers\car\ViewHandler;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use Yii;
@@ -15,6 +17,7 @@ class CarController extends Controller
         $id,
         $module,
         private readonly SaveHandler $saveHandler,
+        private readonly ViewHandler $viewHandler,
         $config = []
     ) {
         parent::__construct($id, $module, $config);
@@ -46,7 +49,22 @@ class CarController extends Controller
 
     public function actionView($id)
     {
-        //
+        try {
+            $car = $this->viewHandler->handle($id);
+            return $car;
+        } catch (CarNotFound $exception) {
+            Yii::$app->response->statusCode = 404;
+            return [
+                'success' => false,
+                'error' => 'Car not found',
+            ];
+        }  catch (Exception $exception) {
+            Yii::$app->response->statusCode = 500;
+            return [
+                'success' => false,
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 
     public function actionList()
