@@ -40,6 +40,13 @@ curl --location 'http://localhost:8000/car/1'
 curl --location 'http://localhost:8000/car/list?page=1'
 В целом выводится по 10 штук. Зашил в коде. Для демо примера. Обычно так не делаю - прописываю в конфиге.
 
+## Тесты
+Выполняются внутри контейнера
+- vendor/bin/codecept run unit dto/CarDtoTest
+- vendor/bin/codecept run unit models/CreateCarFormTest
+- vendor/bin/codecept run unit repositories/CarRepositoryTest
+- endor/bin/codecept run unit handlers/SaveHandlerTest
+
 ## Summary
 В целом сделал так как счел нужным, без обновления знаний и чтения документации по yii2, поэтому какие-то моменты 
 мог упустить. Особенно с обновлением моделей после создания. Не помню, есть ли это в yii2. Сущности в основном у 
